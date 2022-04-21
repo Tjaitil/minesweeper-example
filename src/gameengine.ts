@@ -51,7 +51,7 @@ const GAME_ENGINE = {
       let tile = GAME_PIECES.board.tiles[random];
       tile.isBomb = true;
       let nearbyTiles = GAME_UTILITIES.retrieveTilesAround(tile);
-      nearbyTiles.forEach(tile => tile.nearbyBombNumber++);
+      nearbyTiles.forEach(tile => { if(!tile.isBomb) tile.nearbyBombNumber++ });
       GAME_PIECES.remainingBombs--;
       if (GAME_PIECES.remainingBombs > 0) {
         this.implementBombs();
@@ -77,6 +77,7 @@ const GAME_ENGINE = {
       tile.isBomb = false
       tile.clicked = false;
       tile.flagged = false;
+      tile.nearbyBombNumber = 0;
     });
     GAME_ENGINE.implementBombs();
   },
