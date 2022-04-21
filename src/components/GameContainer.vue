@@ -4,6 +4,7 @@
     :gameStatus="gameStatus"
     :gameStatusText="gameStatusText"
     @reset-board="resetBoard()"
+    @closeOverlay="toggleOverlay()"
   />
   <DifficultyBar @set-difficulty="setDifficulty" :currentDifficulty="currentDifficulty" />
   <HUD :remainingBombs="remainingBombs" @reset-board="resetBoard()" />
@@ -36,7 +37,7 @@ export default defineComponent({
     const showOverlay = ref(false);
     const gameStatusText = ref("");
     const currentDifficulty = ref("expert");
-
+    setDifficulty("expert");
     const remainingBombs = computed(() => {
       let bombs = board.bombs - GAME_PIECES.flags.value;
       if (bombs > 0) {
@@ -50,16 +51,13 @@ export default defineComponent({
     );
 
     function resetBoard() {
-      if (currentDifficulty.value !== "beginner") {
-        setDifficulty(currentDifficulty.value);
-      } else {
-        setDifficulty("beginner");
-      }
+      setDifficulty(currentDifficulty.value);
     }
 
     function setDifficulty(difficulty: string) {
       let difficultyLower = difficulty.toLowerCase();
-      showOverlay.value = false;
+      toggleOverlay(false);
+      GAME_PIECES.board.tiles = [];
       switch (difficultyLower) {
         case "beginner":
           setup(9, 9, 10);
@@ -78,7 +76,7 @@ export default defineComponent({
 
     watch(gameStatus, (newValue, oldValue) => {
       if (gameStatus.value === "playing") return;
-      showOverlay.value = true;
+      toggleOverlay(true);
       if (newValue === "win") {
         gameStatusText.value = "You win!";
       } else if (newValue === "loss") {
@@ -92,7 +90,13 @@ export default defineComponent({
       }
     });
 
-    setDifficulty("expert");
+    function toggleOverlay(newValue: boolean) {
+      if(newValue) {
+        showOverlay.value = !showOverlay.value;
+      } else {
+        showOverlay.value = newValue;
+      }
+    }
     return {
       gameId,
       board,
@@ -107,6 +111,7 @@ export default defineComponent({
       showOverlay,
       gameStatusText,
       currentDifficulty,
+      toggleOverlay,
     };
   },
 });
@@ -115,7 +120,8 @@ export default defineComponent({
 <style scoped>
 #board-container {
   max-width: 704px;
-  overflow-x: scroll;
+  max-height: 80vh;
+  overflow: scroll;
 }
 #board {
   display: grid;
