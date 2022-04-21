@@ -34,7 +34,6 @@ const GAME_ENGINE = {
           });
         }
       }
-    } else {
     }
   },
   implementBombs() {
@@ -49,7 +48,10 @@ const GAME_ENGINE = {
       if (GAME_PIECES.board.tiles[random].isBomb) {
         this.implementBombs();
       }
-      GAME_PIECES.board.tiles[random].isBomb = true;
+      let tile = GAME_PIECES.board.tiles[random];
+      tile.isBomb = true;
+      let nearbyTiles = GAME_UTILITIES.retrieveTilesAround(tile);
+      nearbyTiles.forEach(tile => tile.nearbyBombNumber++);
       GAME_PIECES.remainingBombs--;
       if (GAME_PIECES.remainingBombs > 0) {
         this.implementBombs();
@@ -59,12 +61,10 @@ const GAME_ENGINE = {
     }
   },
   setup(rows: number, columns: number, bombs: number) {
-    // Calculate rows;
-    // 2
     GAME_ENGINE.gameId.value += "A";
     GAME_PIECES.tilesClicked.value = 0;
     GAME_PIECES.flags.value = 0;
-
+    
     GAME_PIECES.board.rows = rows;
     GAME_PIECES.board.columns = columns;
     GAME_PIECES.board.bombs = bombs;
@@ -73,18 +73,12 @@ const GAME_ENGINE = {
     GAME_PIECES.board.maxTiles = rows * columns;
     GAME_ENGINE.status.value = gameState.PLAYING;
     GAME_ENGINE.makeBoard();
-    GAME_PIECES.board.tiles.forEach(tile => tile.isBomb = false);
-    GAME_ENGINE.implementBombs();
-    GAME_PIECES.board.tiles.forEach((tile) => {
+    GAME_PIECES.board.tiles.forEach(tile => {
+      tile.isBomb = false
       tile.clicked = false;
       tile.flagged = false;
-      tile.nearbyBombNumber = GAME_ENGINE.calculateNearbyBombsNumber(tile);
     });
-  },
-  calculateNearbyBombsNumber(tile: tile): number {
-    let nearbyTiles = GAME_UTILITIES.retrieveTilesAround(tile);
-    let bombs = nearbyTiles.filter((tile) => tile.isBomb === true);
-    return bombs.length;
+    GAME_ENGINE.implementBombs();
   },
 };
 
