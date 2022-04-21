@@ -3,7 +3,7 @@
     <button @click="resetBoard">New game</button>
     <p>
       <span v-if="gameStatus !== 'playing'" :class="[gameStatus]">
-        {{ gameStatusText }}
+        {{ gameStatusText }} 
       </span>
     </p>
   </div>
@@ -38,8 +38,9 @@ export default defineComponent({
 <style scoped>
 #overlay {
   position: absolute;
-  left: 50%; /* position the left edge of the element at the middle of the parent */
-  transform: translateX(-50%);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 30%;
   height: 200px;
   max-width: 350px;
