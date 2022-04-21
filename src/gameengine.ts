@@ -143,8 +143,11 @@ const EVENT_HANDLERS = {
   checkNearby(tile: tile) {
     let nearbyTiles = GAME_UTILITIES.retrieveTilesAround(tile);
     nearbyTiles.forEach((tile) => {
-      if (tile.isBomb || tile.clicked || tile.flagged) return;
+      if (tile.clicked || tile.flagged) return;
       tile.clicked = true;
+      if(tile.isBomb && !tile.flagged) {
+        GAME_ENGINE.status.value = gameState.LOSS;
+      }
       GAME_PIECES.tilesClicked.value++;
       // If tile is 0 reveal all neighbour tiles and also check neighbour tiles
       if (tile.nearbyBombNumber === 0) {
