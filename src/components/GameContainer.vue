@@ -89,8 +89,8 @@ export default defineComponent({
         gameStatus.value = gameState.WIN;
       }
     });
-
-    function toggleOverlay(newValue: boolean) {
+    
+    function toggleOverlay(newValue:boolean=false) {
       if(newValue) {
         showOverlay.value = !showOverlay.value;
       } else {
