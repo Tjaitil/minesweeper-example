@@ -1,23 +1,23 @@
 <template>
   <div id="difficultyBar">
-    <p
-      @click="setDifficulty('Beginner')"
+    <button
+      @click="setDifficulty('beginner')"
       :class="{ 'current-difficulty': checkDifficulty('beginner') }"
     >
       Beginner
-    </p>
-    <p
-      @click="setDifficulty('Intermediate')"
+    </button>
+    <button
+      @click="setDifficulty('intermediate')"
       :class="{ 'current-difficulty': checkDifficulty('intermediate') }"
     >
       Intermediate
-    </p>
-    <p
-      @click="setDifficulty('Expert')"
+    </button>
+    <button
+      @click="setDifficulty('expert')"
       :class="{ 'current-difficulty': checkDifficulty('expert') }"
     >
       Expert
-    </p>
+    </button>
   </div>
 </template>
 
@@ -52,8 +52,13 @@ export default defineComponent({
   gap: 10px;
   margin-top: 1rem;
 }
-#difficultyBar > p {
-  cursor: pointer;
+button {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  color: unset;
+  height: 26px;
+  box-sizing: content-box;
   padding-inline: 2px;
 }
 .current-difficulty {
