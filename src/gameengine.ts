@@ -47,12 +47,14 @@ const GAME_ENGINE = {
       let random = getRandomInt(0, GAME_PIECES.board.maxTiles);
       if (GAME_PIECES.board.tiles[random].isBomb) {
         this.implementBombs();
+        return;
+      } else {
+        let tile = GAME_PIECES.board.tiles[random];
+        tile.isBomb = true;
+        let nearbyTiles = GAME_UTILITIES.retrieveTilesAround(tile);
+        nearbyTiles.forEach(tile => { if(!tile.isBomb) tile.nearbyBombNumber++ });
+        GAME_PIECES.remainingBombs--;
       }
-      let tile = GAME_PIECES.board.tiles[random];
-      tile.isBomb = true;
-      let nearbyTiles = GAME_UTILITIES.retrieveTilesAround(tile);
-      nearbyTiles.forEach(tile => { if(!tile.isBomb) tile.nearbyBombNumber++ });
-      GAME_PIECES.remainingBombs--;
       if (GAME_PIECES.remainingBombs > 0) {
         this.implementBombs();
       }
